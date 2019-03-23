@@ -1,73 +1,33 @@
-   /*
-Copyright 2017 Google Inc.
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 
-'use strict';
+///////////////Begin Quagga API call///////////////
 
-var videoElement = document.querySelector('video');
-var audioSelect = document.querySelector('select#audioSource');
-var videoSelect = document.querySelector('select#videoSource');
+  $('#play').hide(); //hides the video area upon script execution. TODO: This might be better as a default CSS property
 
-navigator.mediaDevices.enumerateDevices()
-  .then(gotDevices).then(getStream).catch(handleError);
-
-audioSelect.onchange = getStream;
-videoSelect.onchange = getStream;
-
-function gotDevices(deviceInfos) {
-  for (var i = 0; i !== deviceInfos.length; ++i) {
-    var deviceInfo = deviceInfos[i];
-    var option = document.createElement('option');
-    option.value = deviceInfo.deviceId;
-    if (deviceInfo.kind === 'audioinput') {
-      option.text = deviceInfo.label ||
-        'microphone ' + (audioSelect.length + 1);
-      audioSelect.appendChild(option);
-    } else if (deviceInfo.kind === 'videoinput') {
-      option.text = deviceInfo.label || 'camera ' +
-        (videoSelect.length + 1);
-      videoSelect.appendChild(option);
-    } else {
-      console.log('Found one other kind of source/device: ', deviceInfo);
-    }
-  }
-}
-
-function getStream() {
-  if (window.stream) {
-    window.stream.getTracks().forEach(function(track) {
-      track.stop();
+  $('#startButton').on('click', function(){ //When the start/barcode scan button is clicked
+    $('#play').show(); //shows the video area TODO: do we need to actually show this video feed?
+    Quagga.init({ //initializes the library for configuration (config) and callback (err)
+      inputStream : {
+        name : "Live",
+        type : "LiveStream",
+        target: document.querySelector('#play')    // choose the div which contains the <video> tag
+      },
+      decoder : {
+        readers : ["upc_reader"]/* other reader types: code_128_reader (default), ean_reader, ean_8_reader, code_39_reader, code_39_vin_reader, codabar_reader, upc_reader, upc_e_reader, i2of5_reader, 2of5_reader, code_93_reader */
+      }
+    }, function(err) {//error handling
+        if (err) {
+            console.log(err);
+            return
+        }
+        console.log("Initialization finished. Ready to start");
+        Quagga.start(); //this method actually starts looking for the barcode in the video feed. Without Quagga.start(), it will never find a barcode!
     });
-  }
+  });
 
-  var constraints = {
-    audio: {
-      deviceId: {exact: audioSelect.value}
-    },
-    video: {
-      deviceId: {exact: videoSelect.value}
-    }
-  };
+  Quagga.onDetected(function(data){ //When a barcode is detected
+    console.log(data.codeResult.code); //this is the barcode output. I think the UPC code would be without the first and last digits, but I could be wrong
+    Quagga.stop(); //Stop quagga
+    $('#play').hide(); //Hide the video area
+  })
 
-  navigator.mediaDevices.getUserMedia(constraints).
-    then(gotStream).catch(handleError);
-}
-
-function gotStream(stream) {
-  window.stream = stream; // make stream available to console
-  videoElement.srcObject = stream;
-}
-
-function handleError(error) {
-  console.log('Error: ', error);
-}
-//////End copywrite
+  ///////////////End Quagga API///////////////
