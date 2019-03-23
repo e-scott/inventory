@@ -1,5 +1,6 @@
 
 ///////////////Begin Quagga API call///////////////
+  let dataValidation = false; //initialize dataValidation variable as false
 
   $('#play').hide(); //hides the video area upon script execution. TODO: This might be better as a default CSS property
 
@@ -25,7 +26,15 @@
   });
 
   Quagga.onDetected(function(data){ //When a barcode is detected
-    console.log(data.codeResult.code); //this is the barcode output. I think the UPC code would be without the first and last digits, but I could be wrong
+    const readCode = data.codeResult.code;
+    console.log(readCode); //this is the barcode output. I think the UPC code would be without the first and last digits, but I could be wrong
+    if (readCode.length !== 12){
+      console.log('error, UPC code not read, please make sure code being scanned is a UPC type') //TODO: make this a modal alert box
+      dataValidation = false;
+    } else{
+      console.log('UPC code read')
+      dataValidation = true;
+    }
     Quagga.stop(); //Stop quagga
     $('#play').hide(); //Hide the video area
   })
