@@ -1,3 +1,30 @@
+$(document).ready(function(){
+
+
+//Initialize Firebase
+var config = {
+  apiKey: "AIzaSyAqmUpbmR_CpPZg4Fx6PsYnXdiEKJ52uek",
+  authDomain: "inventory-cc9b8.firebaseapp.com",
+  databaseURL: "https://inventory-cc9b8.firebaseio.com",
+  projectId: "inventory-cc9b8",
+  storageBucket: "inventory-cc9b8.appspot.com",
+  messagingSenderId: "560743834764"
+};
+firebase.initializeApp(config);
+var database = firebase.database();
+const invDB = { //object to track uniqueIDs for each beer TODO update placeholder with beer type
+  B0854141006410: '-LarLGv5K2cwCBNSFMfg',
+  B0860000660402: '-LarLGv8o4ozan6yH0W7',
+  B0853249004373: '-LarLGv9tfyPEicnD6Mw',
+  B0859490002427: '-LarLGv9tfyPEicnD6Mx',
+  B0856765007194: '-LarLGv9tfyPEicnD6My',
+  B0011711276370: '-LarLGvA4iLxGlDv0f6F',
+  B0709870876387: '-LarLGvA4iLxGlDv0f6G',
+  B0635797791963: '-LarLGvBTjhbUoe-GwMd',
+  B0853249004106: '-LarLGvBTjhbUoe-GwMe',
+  placeHolder9: '-LarLGvBTjhbUoe-GwMf',
+}
+database.ref('/inventory/' + invDB.B0854141006410).update({ 'qty': 1234567 });
 
 ///////////////Begin Quagga API call///////////////
 
@@ -31,3 +58,33 @@
   })
 
   ///////////////End Quagga API///////////////
+var upc = codeResult;
+var getURL = `http://cors-anywhere.herokuapp.com/https://api.upcdatabase.org/product/${upc}/9C632CDFED6A28A6814FF46FB527C84D`;
+$.ajax({
+url: getURL,
+  method: 'GET',
+}).then(function(response){
+  console.log(response);
+  var result = response.data;
+  var name = response.title;
+  // var dTitle = $('#dTitle').val();
+  $('#result').empty();
+  //console.log(name);
+  console.log("NAME IS : " + name)
+  var resultDiv = $('<div>');
+  $('#result').html(resultDiv);
+  var p = $('<p>').html(`<h1>Title: ${name}</h1>`);
+  resultDiv.append(p);
+});
+});
+/*$.ajax({
+  url: 'https://first-project-ab6df.firebaseio.com',
+  method : "POST",
+  data: JSON.stringify(result),
+  success: function () {
+    alert('success');
+  },
+  error: function(err) {
+    alert('error: ' + err);
+  }
+});*/
