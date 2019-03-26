@@ -67,7 +67,7 @@ database.ref('/inventory/' + invDB.B0854141006410).update({ 'qty': 1234567 });
   })
 
   ///////////////End Quagga API///////////////
-var upc = codeResult;
+var upc = readCode;
 var getURL = `http://cors-anywhere.herokuapp.com/https://api.upcdatabase.org/product/${upc}/9C632CDFED6A28A6814FF46FB527C84D`;
 $.ajax({
 url: getURL,
