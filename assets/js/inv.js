@@ -112,20 +112,19 @@ $(document).ready(function () {
     database.ref('/inventory/').on("child_added", function (snapshot) { //declare any event listener to pull data
       // console.log('snapshot start');
       // console.log('dbkey: ' + dbKey);
-      if(snapshot.val().UPC == dbKeyKey){ //every database object will be looped through. we are only interested in the one that matches our UPC code
+      if (snapshot.val().UPC == dbKeyKey) { //every database object will be looped through. we are only interested in the one that matches our UPC code
 
-          console.log('before: ' + snapshot.val().qty);
-          currentQty = snapshot.val().qty;
+        console.log('before: ' + snapshot.val().qty);
+        currentQty = snapshot.val().qty;
 
-          // console.log(currentQty);
-          database.ref('/inventory/' + dbKey).update({ 'qty': currentQty - 1});
-          console.log('after: ' + snapshot.val().qty);
+        // console.log(currentQty);
+        database.ref('/inventory/' + dbKey).update({ 'qty': currentQty - 1 });
+        // console.log('after: ' + snapshot.val().qty); // this console.log does not work because firebase updates are asynchronous
       };
 
 
     })
 
-    // console.log('after: ' + snapshot.val().qty);
 
   }
 });
