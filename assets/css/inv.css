@@ -585,14 +585,6 @@ button {
         background-color: #f98780;
 }
 
-    input[type="button"].large,
-    input[type="submit"].large,
-    input[type="reset"].large,
-    button.large {
-        font-size: 1em;
-        min-width: 14em;
-}
-
 header{
     background: lightgray;
     margin-left: 5px;
@@ -602,7 +594,9 @@ header{
     margin-left: 5px;
 }
 
-
+.box {
+	border: 1px solid lightgreen;
+}
 /* XLarge */
 
 @media screen and (max-width: 1680px) {
@@ -646,10 +640,7 @@ header{
      
 	/* Button */
 
-	input[type="button"],
-	input[type="submit"],
-	input[type="reset"],
-    button,{
+    button {
 		display: block;
 		width: 100%;
 		font-size: 1em;
