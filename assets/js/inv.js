@@ -60,6 +60,10 @@ $(document).ready(function () {
         return
       }
       console.log("Initialization finished. Ready to start");
+      $('.drawingBuffer').hide()
+      $('.box').hide()
+      $('#result').hide()
+
       Quagga.start(); //this method actually starts looking for the barcode in the video feed. Without Quagga.start(), it will never find a barcode!
     });
   });
@@ -153,6 +157,9 @@ $(document).ready(function () {
   }
 
   var updateHtml = function (currentQty) {
+    $('.box').show()
+    $('#result').show()
+
     if (addRemove) {
       $('#current').html(`<h1 class="box">Quantity in Stock: ${currentQty + 1}</h1>`);
     } else {
