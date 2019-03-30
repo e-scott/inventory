@@ -654,6 +654,8 @@ header{
 	border: 2px solid lightgreen;
 	margin-right: 20px;
 }
+
+
 /* XLarge */
 
 @media screen and (max-width: 1680px) {
