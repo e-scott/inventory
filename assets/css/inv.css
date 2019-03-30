@@ -1,5 +1,7 @@
 body{
-    height: auto;
+	height: auto;
+	background: url(../../Images/dynamic-style.png)left top repeat;
+	text-align: center;
 }
 .col,.col-1,.col-10,.col-11,.col-12,.col-2,.col-3,
 .col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-auto,
@@ -584,14 +586,17 @@ button {
     button:hover {
         background-color: #f98780;
 }
-
+/* header */
 header{
-    background: lightgray;
-    margin-left: 5px;
+	color: lightgreen;
+    background: #444;
+	margin-left: 5px;
+	font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 #center{
-    margin-left: 5px;
+	margin-left: 0;
+	margin-right: 0;
 }
 
 .box {
@@ -636,6 +641,14 @@ header{
 	visibility: visible;
 	transform: scale(1.0);
 	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+/* logo */
+.logo{
+	height: 79px;
+	width: 94px;
+	border: 2px solid lightgreen;
+	margin-right: 20px;
 }
 /* XLarge */
 
