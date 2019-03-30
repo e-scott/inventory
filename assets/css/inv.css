@@ -603,6 +603,10 @@ header{
 	text-align: center;
 }
 
+#result{
+	text-align:center;
+}
+
 /* Modal */
 #modal {
 	position: fixed;
