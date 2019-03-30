@@ -91,7 +91,7 @@ var closeButton = document.querySelector("#close");
   ///////////////End Quagga API///////////////
   var apiCall = function (readCode) {
     var upc = readCode;
-    var getURL = `http://cors-anywhere.herokuapp.com/https://api.upcdatabase.org/product/${upc}/9C632CDFED6A28A6814FF46FB527C84D`;
+    var getURL = `https://cors-anywhere.herokuapp.com/https://api.upcdatabase.org/product/${upc}/9C632CDFED6A28A6814FF46FB527C84D`;
     $.ajax({
       url: getURL,
       method: 'GET',
