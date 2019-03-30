@@ -26,7 +26,7 @@ $(document).ready(function () {
     B0709870876387: '-LarLGvA4iLxGlDv0f6G',
     B0635797791963: '-LarLGvBTjhbUoe-GwMd',
     B0853249004106: '-LarLGvBTjhbUoe-GwMe',
-    placeHolder9: '-LarLGvBTjhbUoe-GwMf',
+    B0851831000017: '-LarLGvBTjhbUoe-GwMf',
   }
   // database.ref('/inventory/' + invDB.B0854141006410).update({ 'qty': 1234567 });
   var modal = document.querySelector("#modal");
@@ -66,7 +66,7 @@ $(document).ready(function () {
 
 
   Quagga.onDetected(function abc(data) { //When a barcode is detected
-    const readCode = data.codeResult.code;
+    const readCode = 0 + data.codeResult.code;
     console.log(readCode); //this is the barcode output. I think the UPC code would be without the first and last digits, but I could be wrong
     if (readCode.length !== 12) {
       function toggleModal() {
@@ -124,7 +124,6 @@ $(document).ready(function () {
 
   var updateInventory = function (barcode) { //function to update quantity
     var dbKeyKey = 'B' + barcode; //the barcode with 'B' appended before, the key to the database key
-    dbKeyKey = 'B0854141006410'
     // console.log('dbKeyKey:' + dbKeyKey)
     var dbKey = invDB[dbKeyKey]; //the key to the database object
     // console.log('db key: ' + dbKey)
