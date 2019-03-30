@@ -36,7 +36,7 @@ var closeButton = document.querySelector("#close");
 
   $('#play').hide(); //hides the video area upon script execution. TODO: This might be better as a default CSS property
 
-  $('#startButton').on('click', function () { //When the start/barcode scan button is clicked
+  $('.startButton').on('click', function () { //When the start/barcode scan button is clicked
      $('#play').show(); //shows the video area TODO: do we need to actually show this video feed?
      Quagga.init({ //initializes the library for configuration (config) and callback (err)
        inputStream: {
