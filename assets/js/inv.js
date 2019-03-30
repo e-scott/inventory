@@ -105,13 +105,7 @@ $(document).ready(function () {
       method: 'GET',
     }).then(function (response) {
 
-      // console.log(response);
-      // var result = response.data;
-      var name = response.title;
-      // var dTitle = $('#dTitle').val();
-      $('#result').empty();
-      //console.log(name);
-      console.log("NAME IS : " + name)
+
 
       var resultDiv = $('<div>');
       $('#result').html(resultDiv);
