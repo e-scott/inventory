@@ -594,6 +594,11 @@ header{
 	font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
+h1{
+	margin-top: auto;
+    margin-bottom: auto;
+}
+
 #center{
 	margin-left: 0;
 	margin-right: 0;
