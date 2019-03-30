@@ -600,7 +600,7 @@ header{
 }
 
 .box {
-	border: 1px solid lightgreen;
+	text-align: center;
 }
 
 /* Modal */
