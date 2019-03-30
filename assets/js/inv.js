@@ -154,9 +154,9 @@ $(document).ready(function () {
 
   var updateHtml = function (currentQty) {
     if (addRemove) {
-      $('#current').html(`<h1 class="box">Quanity: ${currentQty + 1}</h1>`);
+      $('#current').html(`<h1 class="box">Quantity in Stock: ${currentQty + 1}</h1>`);
     } else {
-      $('#current').html(`<h1 class="box">Quanity: ${currentQty - 1}</h1>`);
+      $('#current').html(`<h1 class="box">Quantity Stock: ${currentQty - 1}</h1>`);
     }
   }
 });
