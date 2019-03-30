@@ -26,60 +26,67 @@ $(document).ready(function () {
     B0709870876387: '-LarLGvA4iLxGlDv0f6G',
     B0635797791963: '-LarLGvBTjhbUoe-GwMd',
     B0853249004106: '-LarLGvBTjhbUoe-GwMe',
-    placeHolder9: '-LarLGvBTjhbUoe-GwMf',
+    B0851831000017: '-LarLGvBTjhbUoe-GwMf',
   }
   // database.ref('/inventory/' + invDB.B0854141006410).update({ 'qty': 1234567 });
-var modal = document.querySelector("#modal");
-var closeButton = document.querySelector("#close");
+  var modal = document.querySelector("#modal");
+  var closeButton = document.querySelector("#close");
   ///////////////Begin Quagga API call///////////////
   let dataValidation = false; //initialize dataValidation variable as false
-
+  let addRemove;
   $('#play').hide(); //hides the video area upon script execution. TODO: This might be better as a default CSS property
 
   $('.startButton').on('click', function () { //When the start/barcode scan button is clicked
-     $('#play').show(); //shows the video area TODO: do we need to actually show this video feed?
-     Quagga.init({ //initializes the library for configuration (config) and callback (err)
-       inputStream: {
-         name: "Live",
-         type: "LiveStream",
-         target: document.querySelector('#play')    // choose the div which contains the <video> tag
-       },
-       decoder: {
-         readers: ["upc_reader"]/* other reader types: code_128_reader (default), ean_reader, ean_8_reader, code_39_reader, code_39_vin_reader, codabar_reader, upc_reader, upc_e_reader, i2of5_reader, 2of5_reader, code_93_reader */
-       }
-     }, function (err) {//error handling
-       if (err) {
-         console.log(err);
-         return
-       }
-       console.log("Initialization finished. Ready to start");
-       Quagga.start(); //this method actually starts looking for the barcode in the video feed. Without Quagga.start(), it will never find a barcode!
-     });
-   });
+    console.log(this.id)
+    if (this.id === 'add') {
+      addRemove = true; //add button is clicked
+    } else {
+      addRemove = false; //remove buton is clicked
+    }
+
+    $('#play').show(); //shows the video area TODO: do we need to actually show this video feed?
+    Quagga.init({ //initializes the library for configuration (config) and callback (err)
+      inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector('#play')    // choose the div which contains the <video> tag
+      },
+      decoder: {
+        readers: ["upc_reader"]/* other reader types: code_128_reader (default), ean_reader, ean_8_reader, code_39_reader, code_39_vin_reader, codabar_reader, upc_reader, upc_e_reader, i2of5_reader, 2of5_reader, code_93_reader */
+      }
+    }, function (err) {//error handling
+      if (err) {
+        console.log(err);
+        return
+      }
+      console.log("Initialization finished. Ready to start");
+      Quagga.start(); //this method actually starts looking for the barcode in the video feed. Without Quagga.start(), it will never find a barcode!
+    });
+  });
 
 
-   Quagga.onDetected(function abc(data) { //When a barcode is detected
-     const readCode = data.codeResult.code;
-     console.log(readCode); //this is the barcode output. I think the UPC code would be without the first and last digits, but I could be wrong
-     if (readCode.length !== 12) {
-       function toggleModal(){
-         modal.classList.toggle("show-modal");
-       }
-       function windowOnClick(event) {
-         if (event.target === modal){
-           toggleModal();
-         }
-       }
-       closeButton.addEventListener('click', toggleModal);
-       window.addEventListener('click', windowOnClick);
-       //console.log('error, UPC code not read, please make sure code being scanned is a UPC type') //TODO: make this a modal alert box
-       dataValidation = false;
-     } else {
-       console.log('UPC code read')
-       dataValidation = true;
-     }
-     Quagga.stop(); //Stop quagga
-     $('#play').hide(); //Hide the video area
+  Quagga.onDetected(function abc(data) { //When a barcode is detected
+    const readCode = 0 + data.codeResult.code;
+    console.log(readCode); //this is the barcode output. I think the UPC code would be without the first and last digits, but I could be wrong
+    if (readCode.length !== 12) {
+      function toggleModal() {
+        modal.classList.toggle("show-modal");
+      }
+      function windowOnClick(event) {
+        if (event.target === modal) {
+          toggleModal();
+        }
+      }
+      closeButton.addEventListener('click', toggleModal);
+      window.addEventListener('click', windowOnClick);
+      //console.log('error, UPC code not read, please make sure code being scanned is a UPC type') //TODO: make this a modal alert box
+      dataValidation = false;
+    } else {
+      console.log('UPC code read')
+      dataValidation = true;
+    }
+    Quagga.stop(); //Stop quagga
+    $('#play').hide(); //Hide the video area
     //TODO: for troubleshooting, remove for final and change readCode from let to const
 
 
@@ -92,17 +99,20 @@ var closeButton = document.querySelector("#close");
   var apiCall = function (readCode) {
     var upc = readCode;
     var getURL = `https://cors-anywhere.herokuapp.com/https://api.upcdatabase.org/product/${upc}/9C632CDFED6A28A6814FF46FB527C84D`;
+
     $.ajax({
       url: getURL,
       method: 'GET',
     }).then(function (response) {
-      console.log(response);
-      var result = response.data;
+
+      // console.log(response);
+      // var result = response.data;
       var name = response.title;
       // var dTitle = $('#dTitle').val();
       $('#result').empty();
       //console.log(name);
       console.log("NAME IS : " + name)
+
       var resultDiv = $('<div>');
       $('#result').html(resultDiv);
       var p = $('<p>').html(`<h1 class="box">${name}</h1>`);
@@ -129,17 +139,24 @@ var closeButton = document.querySelector("#close");
         currentQty = snapshot.val().qty;
 
         // console.log(currentQty);
-        database.ref('/inventory/' + dbKey).update({ 'qty': currentQty - 1 });
+        if (addRemove) {
+          database.ref('/inventory/' + dbKey).update({ 'qty': currentQty + 1 });
+        } else {
+          database.ref('/inventory/' + dbKey).update({ 'qty': currentQty - 1 });
+        }
         // console.log('after: ' + snapshot.val().qty); // this console.log does not work because firebase updates are asynchronous
-        return currentQty;
+        // return currentQty;
       };
+
       updateHtml(currentQty);
-
-      
     })
-
   }
-  var updateHtml = function(currentQty){
-    $('#current').html(`<h1 class="box">Quanity: ${currentQty-1}</h1>`);
+
+  var updateHtml = function (currentQty) {
+    if (addRemove) {
+      $('#current').html(`<h1 class="box">Quanity: ${currentQty + 1}</h1>`);
+    } else {
+      $('#current').html(`<h1 class="box">Quanity: ${currentQty - 1}</h1>`);
+    }
   }
 });
