@@ -29,7 +29,8 @@ $(document).ready(function () {
     placeHolder9: '-LarLGvBTjhbUoe-GwMf',
   }
   // database.ref('/inventory/' + invDB.B0854141006410).update({ 'qty': 1234567 });
-
+var modal = document.querySelector("#modal");
+var closeButton = document.querySelector("#close");
   ///////////////Begin Quagga API call///////////////
   let dataValidation = false; //initialize dataValidation variable as false
 
@@ -58,10 +59,20 @@ $(document).ready(function () {
 
 
    Quagga.onDetected(function abc(data) { //When a barcode is detected
-     let readCode = data.codeResult.code;
+     const readCode = data.codeResult.code;
      console.log(readCode); //this is the barcode output. I think the UPC code would be without the first and last digits, but I could be wrong
      if (readCode.length !== 12) {
-       console.log('error, UPC code not read, please make sure code being scanned is a UPC type') //TODO: make this a modal alert box
+       function toggleModal(){
+         modal.classList.toggle("show-modal");
+       }
+       function windowOnClick(event) {
+         if (event.target === modal){
+           toggleModal();
+         }
+       }
+       closeButton.addEventListener('click', toggleModal);
+       window.addEventListener('click', windowOnClick);
+       //console.log('error, UPC code not read, please make sure code being scanned is a UPC type') //TODO: make this a modal alert box
        dataValidation = false;
      } else {
        console.log('UPC code read')
@@ -69,7 +80,7 @@ $(document).ready(function () {
      }
      Quagga.stop(); //Stop quagga
      $('#play').hide(); //Hide the video area
-    readCode = '0854141006410' //TODO: for troubleshooting, remove for final and change readCode from let to const
+    //TODO: for troubleshooting, remove for final and change readCode from let to const
 
 
     apiCall(readCode);
@@ -132,15 +143,3 @@ $(document).ready(function () {
     $('#current').html(`<h1 class="box">Quanity: ${currentQty-1}</h1>`);
   }
 });
-
-/*$.ajax({
-  url: 'https://first-project-ab6df.firebaseio.com',
-  method : "POST",
-  data: JSON.stringify(result),
-  success: function () {
-    alert('success');
-  },
-  error: function(err) {
-    alert('error: ' + err);
-  }
-});*/
